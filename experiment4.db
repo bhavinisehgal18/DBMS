@@ -1,0 +1,97 @@
+create table employee(
+emp_id int primary key,
+emp_name varchar(100)
+);
+create table department(
+dept_id int primary key,
+dept_name varchar(100)
+);
+create table paydetails(
+emp_id int,
+dept_id int,
+basic int,
+deductions int,
+additions int,
+DOJ DATE,
+primary key(emp_id, dept_id),
+foreign key(emp_id) references employee, foreign key(dept_id) references department
+);
+create table payroll(
+emp_id int,
+pay_date DATE,
+primary key(emp_id),
+foreign key(emp_id) references employee
+);
+Insert into employee values(101, 'bhavini');
+Insert into employee values(102, 'karunya');
+Insert into employee values(103, 'yashika');
+Insert into employee values(104, 'aditya');
+Insert into employee values(105, 'nehal');
+Insert into employee values(106, 'ishita');
+Insert into employee values(107, 'titiksha');
+Insert into employee values(108, 'anshee');
+Insert into employee values(109, 'anubhuti');
+Insert into employee values(110, 'manav');
+Select * from employee;
+
+Insert into department values(1, 'CSE');
+Insert into department values(2, 'IT');
+Insert into department values(3, 'MAE');
+Insert into department values(4, 'CSE');
+Insert into department values(5, 'IT');
+Insert into department values(6, 'ECE');
+Insert into department values(7, 'MAE');
+Insert into department values(8, 'BARCH');
+Insert into department values(9, 'ECE');
+Insert into department values(10, 'BARCH');
+Select * from department;
+
+insert into paydetails values(101,1,0101,500,500,'05-SEP-2000');
+insert into paydetails values(102,2,600,200,700,'06-MAR-1999');
+insert into paydetails values(103,3,900,700,900,'08-JUNE-1998');
+insert into paydetails values(104,4,1000,7000,9000,'16-JULY-2001');
+insert into paydetails values(105,5,100,700,3000,'31-MAY-2000');
+insert into paydetails values(106,6,100,500,7000,'04-FEB-1999');
+insert into paydetails values(107,7,200,700,4000,'18-MAR-2001');
+insert into paydetails values(108,8,200,500,8000,'09-JAN-2000');
+insert into paydetails values(109,9,100,800,10000,'11-DEC-1999');
+insert into paydetails values(110,10,1000,1000,15000,'03-JULY-2000');
+Select * from paydetails;
+
+insert into payroll values(101,'05-SEP-2001');
+insert into payroll values(102,'06-MAR-2000');
+insert into payroll values(103,'08-JUNE-2001');
+insert into payroll values(104,'16-JULY-2002');
+insert into payroll values(105,'31-MAY-2001');
+insert into payroll values(106,'04-FEB-2000');
+insert into payroll values(107,'18-MAR-2000');
+insert into payroll values(108,'09-JAN-2001');
+insert into payroll values(109,'11-DEC-2000');
+insert into payroll values(110,'03-JULY-2001');
+Select * from payroll;
+
+select e.emp_id,e.emp_name ,d.dept_id ,d.dept_name,pd.DOJ,pd.basic 
+from employee e,department d, paydetails pd ,payroll pr where e.emp_id=pd.emp_id 
+and d.dept_id=pd.dept_id and e.emp_id=pr.emp_id ;
+
+select e.emp_name from employee e,paydetails pd where e.emp_id=pd.emp_id 
+and pd.DOJ>='16-JULY-2001';
+
+select e.emp_id , e.emp_name,d.dept_id , d.dept_name , pd.basic from employee e , department d , paydetails pd , payroll pr where e.emp_id=pd.emp_id and d.dept_id=pd.dept_id and 
+e.emp_id=pr.emp_id and pd.basic between 800 and 1000 ;
+
+select * from department where dept_name= 'CSE';
+
+select emp_name from employee where emp_id 
+in(select emp_id from paydetails where basic+additions-deductions>3000);
+
+create view list as select e.emp_name , d.dept_name , pd.basic,pd.deductions , 
+ (pd.basic+pd.additions-pd.deductions) netsalary from employee e, department d, paydetails pd,payroll pr 
+ where e.emp_id=pd.emp_id and d.dept_id=pd.dept_id and e.emp_id=pr.emp_id  ;
+ select * from list ;
+
+create view list2 as select e.emp_name , (pd.basic+pd.additions-pd.deductions) netsalary
+from employee e, department d, paydetails pd,payroll pr where e.emp_id=pd.emp_id
+and d.dept_id=pd.dept_id and e.emp_id=pr.emp_id  ;
+select * from list2 ;
+ 

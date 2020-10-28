@@ -1,0 +1,96 @@
+create table student(
+stud_no int,
+stud_name varchar(50),
+class varchar(50),
+primary key(stud_no,class)
+);
+create table class (
+class varchar(50),
+descrip varchar(50),
+primary key(class, descrip)
+);
+create table lab(
+mach_no int,
+lab_no int,
+description varchar(50),
+primary key(mach_no)
+);
+create table allotment(
+stud_no int,
+mach_no int,
+dayofweek varchar(50),
+primary key(stud_no, mach_no, dayofweek)
+);
+
+Insert into student values(1001, 'bhavini','X');
+Insert into student values(1002, 'karunya','XI');
+Insert into student values(1003, 'yashika','IX');
+Insert into student values(1004, 'aditya', 'XII');
+Insert into student values(1005, 'nehal', 'VII');
+Insert into student values(1006, 'ishita', 'X');
+Insert into student values(1007, 'titiksha','VI');
+Insert into student values(1008, 'anshee', 'VII');
+Insert into student values(1009, 'anubhuti','XII');
+Insert into student values(1010, 'manav', 'XI');
+Select * from student;
+
+Insert into class values('X','Maths lab');
+Insert into class values('XI','Physics lab machine no. 3');
+Insert into class values('IX','Chemistry lab machine no. 1');
+Insert into class values('XII','English');
+Insert into class values('VII','Biology lab machine no. 2');
+Insert into class values('X','Physics lab machine no. 1');
+Insert into class values('VI','Physics lab machine no. 4');
+Insert into class values('VII','English');
+Insert into class values('XII','Chemistry lab machine no. 2');
+Insert into class values('XI','Maths lab');
+Select * from class;
+
+insert into lab values(1,11,'machine no.1 lab no.11');
+insert into lab values(2,12,'machine no.2 lab no.12');
+insert into lab values(3,13,'machine no.3 lab no.13');
+insert into lab values(4,14,'machine no.4 lab no.14');
+insert into lab values(5,15,'machine no.5 lab no.15');
+insert into lab values(6,11,'machine no.6 lab no.11');
+insert into lab values(7,12,'machine no.7 lab no.12');
+insert into lab values(8,13,'machine no.8 lab no.13');
+insert into lab values(9,14,'machine no.9 lab no.14');
+insert into lab values(10,15,'machine no.10 lab no.15');
+Select * from lab;
+
+insert into allotment values(1001,1,'Sunday');
+insert into allotment values(1002,2,'Friday');
+insert into allotment values(1003,3,'Monday');
+insert into allotment values(1004,4,'Sunday');
+insert into allotment values(1005,5,'Tuesday');
+insert into allotment values(1006,6,'Wednesday');
+insert into allotment values(1007,7,'Thursday');
+insert into allotment values(1008,8,'Saturday');
+insert into allotment values(1009,9,'Wednesday');
+insert into allotment values(1010,10,'Saturday');
+Select * from allotment;
+
+select s.stud_name,l.mach_no from student s,Lab l,allotment a where  
+a.mach_no=l.mach_no and a.stud_no=s.stud_no;
+
+select l.mach_no,l.description,a.dayofweek from Lab l,allotment a where 
+a.mach_no=l.mach_no;
+
+select count(mach_no)from allotment where stud_no in(select stud_no from
+student where class='XII');
+
+select a.stud_no,a.mach_no,s.stud_name,s.class from allotment a,student s where
+a.stud_no=s.stud_no and a.stud_no=1005;
+
+select count(mach_no) from allotment where  dayofweek='Monday';
+
+select count(stud_no) "allocated students in the labs", class from student
+where stud_no in(select stud_no from allotment) group by class;
+
+create view details as select s.stud_name,s.stud_no,a.dayofweek,l.mach_no,l.lab_no
+from student s,Lab l,allotment a where  a.mach_no=l.mach_no 
+and a.stud_no=s.stud_no;
+select * from details;
+
+create view list as select mach_no from allotment where dayofweek ='Thursday';
+select * from list;
